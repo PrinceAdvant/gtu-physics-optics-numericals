@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GTU Physics BE01000021 optics numericals: Newton&#x27;s rings, liquid refractive index, grating and single slit</title>
+<meta name="description" content="Optics is one of the new units in BE01000021 Physics (8 hrs, 18% as listed in GTU Hero&#x27;s Physics guide), and the guide notes that optics and quantum a">
+<style>body{font-family:system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;line-height:1.5}input,textarea,select{margin:.3rem 0;padding:.3rem;width:min(100%,360px);box-sizing:border-box}textarea{width:min(100%,520px);min-height:6rem;font-family:ui-monospace,monospace}#out{font-weight:bold;margin-top:1rem;white-space:pre-wrap;font-family:ui-monospace,monospace}</style></head><body>
+<h1>GTU Physics BE01000021 optics numericals: Newton&#x27;s rings, liquid refractive index, grating and single slit</h1>
+<p>Optics is one of the new units in BE01000021 Physics (8 hrs, 18% as listed in GTU Hero&#x27;s Physics guide), and the guide notes that optics and quantum are already showing up hard in the new scheme papers. Diameters ya lines per cm daalo: this page solves the standard formula numericals (Newton&#x27;s rings wavelength, refractive index of a liquid film, grating orders and single slit minima) with unit conversion done for you. Practice values are my own, not from a GTU paper.</p>
+<h2>Tool</h2>
+<label>Type<br><select id="ty"><option value="nr">Newton's rings wavelength</option><option value="mu">Liquid refractive index</option><option value="gr">Diffraction grating</option><option value="ss">Single slit minimum</option></select></label><br><label>Newton: D_n (mm) | Liquid: D air (mm) | Grating: lines per cm | Slit: width (mm)<br><input id="a" value="3.36"></label><br><label>Newton: D_(n+p) (mm) | Liquid: D liquid (mm) | Grating and slit: wavelength (nm)<br><input id="b" value="5.90"></label><br><label>Newton: p | Grating and slit: order n<br><input id="c" value="10"></label><br><label>Newton: radius of curvature R (m)<br><input id="d" value="1"></label><br>
+<button type="button" onclick="go()">Show</button>
+<div id="out"></div>
+<h2>Facts used</h2>
+<ul><li>Newton&#x27;s rings (reflected light, air film): D_n^2 = 4 n lambda R, so lambda = (D_(n+p)^2 - D_n^2) / (4 p R). Using the difference cancels the unknown contact error.</li><li>Liquid between lens and plate: D^2 = 4 n lambda R / mu, so mu = D_air^2 / D_liquid^2 for the same ring number. Rings shrink in the liquid.</li><li>Diffraction grating: d sin theta = n lambda with d = 1/N. Convert lines per cm to lines per m first (5000 per cm = 5 x 10^5 per m, so d = 2 x 10^-6 m).</li><li>Highest order: n_max is the whole number part of d / lambda. If d / lambda comes out exactly whole, that order is at 90 degrees and is not seen, so the highest visible order is one less.</li><li>Single slit minima: a sin theta = n lambda for n = 1, 2, 3...</li><li>Hand-worked: D5 = 3.36 mm, D15 = 5.90 mm, p = 10, R = 1 m gives lambda = 588.0 nm.</li></ul>
+<h2>Galti mat karna</h2>
+<ul><li>Ring diameters are given in mm or cm and R in m or cm. Convert everything to metres before squaring. Unit galti = zero.</li><li>Square the diameters first, then subtract. Do not subtract diameters and square.</li><li>Grating: if they give lines per inch, 1 inch = 2.54 cm.</li><li>Write the formula, substitute with units, then the answer. Formula line alone usually gets a mark.</li></ul>
+<p>Physics weightage and the repeated question list: <a href="https://gtuhero.com/blogs/gtu-physics-paper-sem-1-2-pyq">GTU Hero</a> (GTU Hero is my project). Source and tests: <a href="https://github.com/PrinceAdvant/gtu-physics-optics-numericals">github.com/PrinceAdvant/gtu-physics-optics-numericals</a>.</p>
+<script src="calc.js"></script>
+<script>
+function go(){
+  let out;
+  try { const t = document.getElementById('ty').value, a = Number(document.getElementById('a').value), b = Number(document.getElementById('b').value), c = Number(document.getElementById('c').value), d = Number(document.getElementById('d').value); if (t === 'nr') out = 'lambda = (D_(n+p)^2 - D_n^2) / (4 p R) = ' + F.newtonWavelength(a, b, c, d).toFixed(2) + ' nm'; else if (t === 'mu') out = 'mu = (D air / D liquid)^2 = ' + F.liquidMu(a, b).toFixed(4); else if (t === 'gr') { const g = F.grating(a, b, c); out = 'd = 1 / N = ' + g.d_m.toExponential(4) + ' m. Highest visible order = ' + g.maxOrder + '. ' + (g.theta === null ? 'Order ' + c + ' is not possible (sin theta would be >= 1).' : 'Order ' + c + ' at theta = ' + g.theta.toFixed(3) + ' deg.'); } else { const s = F.singleSlitMin(a, b, c); out = s === null ? 'No minimum of that order (sin theta > 1).' : 'a sin theta = n lambda gives theta = ' + s.toFixed(4) + ' deg'; } }
+  catch (err) { out = 'Check your input: ' + err.message; }
+  document.getElementById('out').textContent = out;
+}
+go();
+</script>
+</body></html>
